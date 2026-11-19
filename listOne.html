@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Student</title>
+    <link rel="stylesheet" href="lilac-powder-blue.css">
+</head>
+
+<body>
+    <h1>SEARCH STUDENT</h1>
+    <hr>
+
+    <a href="index.html">Home</a> |
+    <a href="list.html">List Students</a> |
+    <a href="listOne.html">List Required Student</a> |
+    <a href="insert.html">Insert Student</a> |
+    <a href="update.html">Update Student</a> |
+    <a href="delete.html">Delete Student</a>
+
+    <hr>
+
+    <label for="sno">Student Number:</label>
+
+    <select id="sno">
+        <option value="">-- Select Student Number --</option>
+    </select>
+
+    <button onclick="searchStudent()">Search</button>
+
+    <br><br>
+
+    <table border="1" id="studentTable">
+        <tr>
+            <th>Student Number</th>
+            <th>Name</th>
+            <th>Total</th>
+            <th>Age</th>
+            <th>PhoneNo</th>
+        </tr>
+    </table>
+
+    <br>
+
+    <button onclick="location.href='index.html'">
+        Home Page
+    </button>
+
+    <script>
+        // Load student numbers into the dropdown
+        function loadStudentNumbers() {
+            fetch("/students")
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Failed to load students");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    let dropdown = document.getElementById("sno");
+
+                    data.forEach(student => {
+                        let option = document.createElement("option");
+
+                        option.value = student.student_id;
+                        option.textContent = student.student_id;
+
+                        dropdown.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert("Error loading student numbers");
+                });
+        }
+
+        // Search for the selected student
+        function searchStudent() {
+            let sno = document.getElementById("sno").value;
+
+            if (sno === "") {
+                alert("Please select a student number");
+                return;
+            }
+
+            fetch("/students/" + sno)
+                .then(response => response.json())
+                .then(data => {
+                    let table = document.getElementById("studentTable");
+
+                    if (!data || data.length === 0) {
+                        alert("Student Not Found");
+                        return;
+                    }
+
+                    table.innerHTML = `
+                        <tr>
+                            <th>Student Number</th>
+                            <th>Name</th>
+                            <th>Total</th>
+                            <th>Age</th>
+                            <th>PhoneNo</th>
+                        </tr>
+                        <tr>
+                            <td>${data[0].student_id}</td>
+                            <td>${data[0].student_name}</td>
+                            <td>${data[0].total}</td>
+                            <td>${data[0].age ?? ""}</td>
+                            <td>${data[0].phoneno ?? ""}</td>
+                        </tr>
+                    `;
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert("Error searching for student");
+                });
+        }
+
+        // Run when the page opens
+        loadStudentNumbers();
+    </script>
+</body>
+</html>
