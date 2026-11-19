@@ -1,0 +1,97 @@
+<!-- To delete student data -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete Student</title>
+    <link rel="stylesheet" href="lilac-powder-blue.css">
+</head>
+
+<body>
+<h1>DELETE STUDENT</h1>
+<hr>
+
+<a href="index.html">Home</a> |
+<a href="list.html">List Students</a> |
+<a href="listOne.html">List Required Student</a> |
+<a href="insert.html">Insert Student</a> |
+<a href="update.html">Update Student</a> |
+<a href="delete.html">Delete Student</a>
+
+<hr>
+
+Student Number to Delete
+
+<select id="sno">
+    <option value="">-- Select Student Number --</option>
+</select>
+
+<br><br>
+
+<button onclick="deleteStudent()">Delete</button>
+
+<br><br>
+
+<button onclick="location.href='index.html'">Home Page</button>
+
+<script>
+// Load student numbers into dropdown
+function loadStudents() {
+    fetch("/students")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Failed to load student numbers");
+            }
+            return response.json();
+        })
+        .then(data => {
+            let dropdown = document.getElementById("sno");
+
+            data.forEach(student => {
+                let option = document.createElement("option");
+                option.value = student.student_id;
+                option.textContent = student.student_id;
+                dropdown.appendChild(option);
+            });
+        })
+        .catch(error => alert(error.message));
+}
+
+// Delete selected student
+function deleteStudent() {
+    let sno = document.getElementById("sno").value;
+
+    if (sno === "") {
+        alert("Please select a student number");
+        return;
+    }
+
+    if (!confirm("Are you sure you want to delete student " + sno + "?")) {
+        return;
+    }
+
+    fetch("/students/" + encodeURIComponent(sno), {
+        method: "DELETE"
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.text();
+        }
+
+        return response.text().then(message => {
+            throw new Error(message || "Failed to delete student");
+        });
+    })
+    .then(message => {
+        alert(message);
+        location.href = "index.html";
+    })
+    .catch(error => {
+        alert(error.message);
+    });
+}
+
+loadStudents();
+</script>
+
+</body>
+</html>
