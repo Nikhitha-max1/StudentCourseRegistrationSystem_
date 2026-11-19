@@ -1,0 +1,170 @@
+<!-- UPDATE STUDENT DETAILS -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Student</title>
+    <link rel="stylesheet" href="lilac-powder-blue.css">
+</head>
+
+<body>
+<h1>UPDATE STUDENT</h1>
+<hr>
+
+<a href="index.html">Home</a> |
+<a href="list.html">List Students</a> |
+<a href="listOne.html">List Required Student</a> |
+<a href="insert.html">Insert Student</a> |
+<a href="update.html">Update Student</a> |
+<a href="delete.html">Delete Student</a>
+
+<hr>
+
+Student Number
+<input type="number" id="sno"
+       list="studentNumbers"
+       placeholder="Enter or select student number"
+       onchange="loadStudentDetails()">
+
+<datalist id="studentNumbers"></datalist>
+
+<br><br>
+
+Student Name
+<input type="text" id="name"
+       list="studentNames"
+       placeholder="Enter or select student name">
+
+<datalist id="studentNames"></datalist>
+
+<br><br>
+
+Total Marks
+<input type="number" id="total">
+<br><br>
+
+Age
+<input type="number" id="age">
+<br><br>
+
+PhoneNo
+<input type="tel" id="phoneno">
+<br><br>
+
+<button onclick="updateStudent()">Update</button>
+
+<br><br>
+
+<button onclick="location.href='index.html'">Home Page</button>
+
+<script>
+// Load student numbers and names into dropdown suggestions
+function loadStudents() {
+    fetch("/students")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Failed to load students");
+            }
+            return response.json();
+        })
+        .then(data => {
+            let numbers = document.getElementById("studentNumbers");
+            let names = document.getElementById("studentNames");
+
+            numbers.innerHTML = "";
+            names.innerHTML = "";
+
+            data.forEach(student => {
+                let option1 = document.createElement("option");
+                option1.value = student.student_id;
+                numbers.appendChild(option1);
+
+                let option2 = document.createElement("option");
+                option2.value = student.student_name;
+                names.appendChild(option2);
+            });
+        })
+        .catch(error => alert(error.message));
+}
+
+// Load details when a student number is entered or selected
+function loadStudentDetails() {
+    let sno = document.getElementById("sno").value;
+
+    if (sno === "") return;
+
+    fetch("/students/" + encodeURIComponent(sno))
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Student not found");
+            }
+            return response.json();
+        })
+        .then(data => {
+            let student = Array.isArray(data) ? data[0] : data;
+
+            if (!student || !student.student_id) {
+                alert("Student not found");
+                return;
+            }
+
+            document.getElementById("name").value =
+                student.student_name ?? "";
+
+            document.getElementById("total").value =
+                student.total ?? "";
+
+            document.getElementById("age").value =
+                student.age ?? "";
+
+            document.getElementById("phoneno").value =
+                student.phoneno ?? "";
+        })
+        .catch(error => alert(error.message));
+}
+
+// Update student details
+function updateStudent() {
+    let sno = document.getElementById("sno").value.trim();
+    let name = document.getElementById("name").value.trim();
+    let total = document.getElementById("total").value;
+    let age = document.getElementById("age").value;
+    let phoneno = document.getElementById("phoneno").value;
+
+    if (sno === "" || name === "") {
+        alert("Please enter or select a student number and name");
+        return;
+    }
+
+    fetch("/students/" + encodeURIComponent(sno), {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            sno: sno,
+            name: name,
+            total: total,
+            age: age,
+            phoneno: phoneno
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(message => {
+                throw new Error(message || "Update failed");
+            });
+        }
+        return response.text();
+    })
+    .then(message => {
+        alert(message);
+        location.href = "index.html";
+    })
+    .catch(error => alert(error.message));
+}
+
+loadStudents();
+</script>
+
+</body>
+</html>
