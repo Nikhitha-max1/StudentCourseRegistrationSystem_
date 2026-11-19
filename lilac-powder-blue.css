@@ -1,0 +1,224 @@
+
+/* Lilac + Powder Blue — soft, elegant, modern theme */
+
+:root {
+    --primary: #E6D9F2;
+    --secondary: #B8C9F5;
+    --background: #F8F7FC;
+    --text: #302B3D;
+    --accent: #8C78B8;
+    --surface: #FFFFFF;
+    --border: #DED9EE;
+    --muted: #716B80;
+    --shadow: 0 12px 30px rgba(74, 66, 110, 0.10);
+}
+
+/* Apply consistent sizing */
+* {
+    box-sizing: border-box;
+}
+
+/* Background image for all pages */
+body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 36px 6%;
+    font-family: "Segoe UI", Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--text);
+
+    background:
+        linear-gradient(
+            rgba(230, 221, 255, 0.72),
+            rgba(205, 230, 255, 0.78)
+        ),
+        url("images/background.jpg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* Headings */
+h1, h2, h3 {
+    color: #5B4B78;
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-weight: 700;
+}
+
+h1 {
+    margin: 0 0 22px;
+    padding: 15px 0;
+    font-size: clamp(1.8rem, 4vw, 2.7rem);
+    letter-spacing: 0.5px;
+    text-align: center;
+}
+
+/* Horizontal lines */
+hr {
+    height: 1px;
+    margin: 22px 0;
+    border: 0;
+    background: var(--border);
+}
+
+/* Navigation links */
+a {
+    display: inline-block;
+    margin: 4px 8px 4px 0;
+    color: #62538F;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: #40345F;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+/* Labels */
+label {
+    display: inline-block;
+    margin: 6px 0;
+    color: #5B4B78;
+    font-weight: 600;
+}
+
+/* Input fields, dropdowns and text areas */
+input,
+select,
+textarea {
+    width: min(100%, 360px);
+    margin: 6px 0 12px;
+    padding: 11px 13px;
+    border: 1px solid #D2C9E5;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.94);
+    color: var(--text);
+    font: inherit;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--muted);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--accent);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(140, 120, 184, 0.14);
+}
+
+/* Buttons */
+button {
+    margin: 8px 8px 8px 0;
+    padding: 12px 20px;
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+    background: var(--secondary);
+    color: var(--text);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(95, 85, 145, 0.12);
+    transition: background 0.2s ease, color 0.2s ease,
+                transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+    background: var(--primary);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    margin: 18px 0;
+    border: 1px solid var(--border);
+    border-collapse: collapse;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: var(--shadow);
+}
+
+th,
+td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+th {
+    background: var(--primary);
+    color: var(--text);
+    font-weight: 700;
+}
+
+tr:nth-child(even) {
+    background: #F0F2FC;
+}
+
+tr:hover td {
+    background: #E8ECFA;
+}
+
+tr:last-child td {
+    border-bottom: 0;
+}
+
+/* Optional cards and panels */
+.card,
+.panel,
+form {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.90);
+    box-shadow: var(--shadow);
+}
+
+.card,
+.panel {
+    padding: 22px;
+}
+
+/* Keyboard focus */
+:focus-visible {
+    outline-color: var(--accent);
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+    body {
+        padding: 24px 5%;
+        background-attachment: scroll;
+    }
+
+    button {
+        max-width: 100%;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    th,
+    td {
+        padding: 10px 12px;
+    }
+}
