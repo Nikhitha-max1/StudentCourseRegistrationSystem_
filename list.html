@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>List Students</title>
+    <link rel="stylesheet" href="lilac-powder-blue.css">
+
+</head>
+<body>
+
+<h1>LIST OF STUDENTS</h1>
+<hr>
+
+<a href="index.html">Home</a> |
+<a href="list.html">List Students</a> |
+<a href="listOne.html">List Required Student</a> |
+<a href="insert.html">Insert Student</a> |
+<a href="update.html">Update Student</a> |
+<a href="delete.html">Delete Student</a>
+
+<hr>
+
+<button onclick="loadStudents()">Refresh List</button>
+<br><br>
+
+<table border="1" id="studentTable">
+</table>
+
+<br>
+
+<button onclick="location.href='index.html'">
+    Home Page
+</button>
+
+<script>
+loadStudents();
+
+function loadStudents() {
+    fetch("/students")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Failed to load students");
+            }
+            return response.json();
+        })
+        .then(data => {
+            let table = document.getElementById("studentTable");
+
+            table.innerHTML = `
+                <tr>
+                    <th>Student Number</th>
+                    <th>Name</th>
+                    <th>Class</th>
+                    <th>Total</th>
+                    <th>Age</th>
+                    <th>PhoneNo</th>
+                </tr>`;
+
+            data.forEach(student => {
+                table.innerHTML += `
+                    <tr>
+                        <td>${student.student_id}</td>
+                        <td>${student.student_name}</td>
+                        <td>${student.class}</td>
+                        <td>${student.total}</td>
+                        <td>${student.age}</td>
+                        <td>${student.phoneno}</td>
+
+                    </tr>`;
+            });
+        })
+        .catch(error => {
+            console.error(error);
+            document.getElementById("studentTable").innerHTML =
+                "<tr><td>Error loading student data</td></tr>";
+        });
+}
+</script>
+
+</body>
+</html>
